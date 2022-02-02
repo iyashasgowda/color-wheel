@@ -1,15 +1,36 @@
 document.addEventListener('DOMContentLoaded', () => {
    const canvas = document.querySelector('canvas');
-   getColorWheel(canvas, 512);
+   const context = canvas.getContext('2d');
+   buildColorWheel(canvas, 256, 'white');
 
-   canvas.addEventListener('mousemove', (e) => {
-      const context = canvas.getContext('2d');
-      const data = context.getImageData(e.offsetX, e.offsetY, 1, 1);
+   let dragging = false;
+   document.querySelector('body').addEventListener('mouseup', () => (dragging = false));
+   context.canvas.addEventListener('mousedown', () => (dragging = true));
+   context.canvas.addEventListener('mouseup', () => (dragging = false));
+
+   context.canvas.addEventListener('mousemove', (event) => {
+      if (dragging) {
+         const dot = document.querySelector('.dot');
+         const data = context.getImageData(event.offsetX, event.offsetY, 1, 1);
+         document.querySelector('.rgb-code').innerHTML = `RGB: ${data.data.slice(0, 3).join(', ')}`;
+
+         dot.style.top = event.pageY + 'px';
+         dot.style.left = event.pageX + 'px';
+      }
+   });
+
+   context.canvas.addEventListener('click', (event) => {
+      dragging = false;
+      const dot = document.querySelector('.dot');
+      const data = context.getImageData(event.offsetX, event.offsetY, 1, 1);
       document.querySelector('.rgb-code').innerHTML = `RGB: ${data.data.slice(0, 3).join(', ')}`;
+
+      dot.style.top = event.pageY + 'px';
+      dot.style.left = event.pageX + 'px';
    });
 });
 
-const getColorWheel = (canvas, size) => {
+const buildColorWheel = (canvas, size, shade) => {
    const context = canvas.getContext('2d');
    canvas.width = size;
    canvas.height = size;
@@ -32,7 +53,7 @@ const getColorWheel = (canvas, size) => {
       }
 
       const grad = context.createRadialGradient(radius, radius, 0, radius, radius, radius);
-      grad.addColorStop(0, 'white');
+      grad.addColorStop(0, shade);
       grad.addColorStop(1, `rgb(${rgb.map((h) => Math.floor(h)).join(',')})`);
       context.fillStyle = grad;
 

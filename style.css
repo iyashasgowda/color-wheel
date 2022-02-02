@@ -19,3 +19,36 @@ body {
 body h2 {
    text-align: center;
 }
+
+.color-wheel {
+   border-radius: 50%;
+}
+
+.selected-color {
+   width: 32px;
+   height: 32px;
+   border-radius: 12px;
+   margin-top: 20px;
+}
+
+.wheel-parent {
+   display: flex;
+   align-items: center;
+   justify-content: center;
+
+   background-color: white;
+   border-radius: 50%;
+   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+}
+
+.dot {
+   width: 8px;
+   height: 8px;
+   aspect-ratio: 1/1;
+   -webkit-user-drag: none;
+   -khtml-user-drag: none;
+   -moz-user-drag: none;
+   -o-user-drag: none;
+   user-select: none;
+   position: absolute;
+}
